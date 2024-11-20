@@ -5,6 +5,9 @@ const crypto = require("crypto");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+// Added
+const cors = require("cors");
+app.use(cors());
 
 // Replace with your Salesforce Connected App's Consumer Secret
 const CONSUMER_SECRET =
@@ -13,6 +16,12 @@ const CONSUMER_SECRET =
 // Middleware
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+
+// Middleware to log all incoming requests
+app.use((req, res, next) => {
+  console.log(`Incoming request: ${req.method} ${req.url}`);
+  next();
+});
 
 // Add a GET handler for the root URL `/` to check app status
 app.get("/", (req, res) => {
@@ -52,16 +61,24 @@ app.post("/", (req, res) => {
     const userContext = parsedPayload.context.user;
     const orgContext = parsedPayload.context.organization;
 
-    // Respond with a simple HTML page
+    // Respond with an HTML page styled with SLDS
     res.send(`
             <html>
                 <head>
                     <title>Canvas App</title>
+                    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/salesforce-lightning-design-system/2.14.3/styles/salesforce-lightning-design-system.min.css" />
                 </head>
-                <body>
-                    <h1>Welcome, ${userContext.fullName}!</h1>
-                    <p>Email: ${userContext.email}</p>
-                    <p>Organization ID: ${orgContext.organizationId}</p>
+                <body class="slds-scope">
+                    <div class="slds-grid slds-gutters">
+                        <div class="slds-col slds-size_1-of-1">
+                            <div class="slds-box slds-theme_default slds-p-around_large">
+                                <h1 class="slds-text-heading_large">You are in a Heroku Canvas App</h1>
+                                <h2 class="slds-text-heading_medium">Welcome, ${userContext.fullName}!</h2>
+                                <p class="slds-text-body_regular">Email: ${userContext.email}</p>
+                                <p class="slds-text-body_regular">Organization ID: ${orgContext.organizationId}</p>
+                            </div>
+                        </div>
+                    </div>
                 </body>
             </html>
         `);
