@@ -93,8 +93,15 @@ app.post("/", (req, res) => {
                             <div class="slds-box slds-theme_default slds-p-around_large">
                                 <h1 class="slds-text-heading_large">You are in a Heroku Canvas App</h1>
                                 <h2 class="slds-text-heading_medium">Welcome, ${userContext.fullName}!</h2>
+                                <p class="slds-text-body_regular">User ID: ${userContext.userId}</p>
+                                <p class="slds-text-body_regular">Username: ${userContext.userName}</p>
                                 <p class="slds-text-body_regular">Email: ${userContext.email}</p>
+                                <p class="slds-text-body_regular">Role: ${userContext.role}</p>
+                                <p class="slds-text-body_regular">Profile ID: ${userContext.profileId}</p>
                                 <p class="slds-text-body_regular">Organization ID: ${orgContext.organizationId}</p>
+                                <p class="slds-text-body_regular">Organization Name: ${orgContext.name}</p>
+                                <p class="slds-text-body_regular">Currency ISO Code: ${orgContext.currencyIsoCode}</p>
+                                <p class="slds-text-body_regular">Instance URL: ${orgContext.instanceUrl}</p>
                             </div>
                         </div>
                     </div>
