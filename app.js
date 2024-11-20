@@ -25,7 +25,26 @@ app.use((req, res, next) => {
 
 // Add a GET handler for the root URL `/` to check app status
 app.get("/", (req, res) => {
-  res.send("The app is running! Use the /canvas route for Salesforce Canvas.");
+  res.send(`
+    <html>
+        <head>
+            <title>Canvas App</title>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/salesforce-lightning-design-system/2.14.3/styles/salesforce-lightning-design-system.min.css" />
+        </head>
+        <body class="slds-scope">
+            <div class="slds-grid slds-gutters">
+                <div class="slds-col slds-size_1-of-1">
+                    <div class="slds-box slds-theme_default slds-p-around_large">
+                        <h1 class="slds-text-heading_large">You are in a Heroku Canvas App in GET Request</h1>
+                        <h2 class="slds-text-heading_medium">Welcome, ${userContext.fullName}!</h2>
+                        <p class="slds-text-body_regular">Email: ${userContext.email}</p>
+                        <p class="slds-text-body_regular">Organization ID: ${orgContext.organizationId}</p>
+                    </div>
+                </div>
+            </div>
+        </body>
+    </html>
+`);
 });
 
 // Handle POST requests to the root URL `/`
