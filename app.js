@@ -36,9 +36,9 @@ app.get("/", (req, res) => {
                         <div class="slds-col slds-size_1-of-1">
                             <div class="slds-box slds-theme_default slds-p-around_large">
                                 <h1 class="slds-text-heading_large">You are in a Heroku Canvas App  in GET call</h1>
-                                <h2 class="slds-text-heading_medium">Welcome, ${userContext.fullName}!</h2>
-                                <p class="slds-text-body_regular">Email: ${userContext.email}</p>
-                                <p class="slds-text-body_regular">Organization ID: ${orgContext.organizationId}</p>
+                                <h2 class="slds-text-heading_medium">Welcome, Swapnil Borkar!</h2>
+                                <p class="slds-text-body_regular">Email: swapnil.brokar@ksalesforce.com</p>
+                                <p class="slds-text-body_regular">Organization ID: 00DDm000000HJmqMAG</p>
                             </div>
                         </div>
                     </div>
