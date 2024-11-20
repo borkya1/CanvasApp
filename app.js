@@ -30,12 +30,34 @@ app.get("/", (req, res) => {
                 <head>
                     <title>Canvas App</title>
                     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/salesforce-lightning-design-system/2.14.3/styles/salesforce-lightning-design-system.min.css" />
+                    <style>
+                        body {
+                            background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+                            color: #333;
+                            font-family: Arial, sans-serif;
+                        }
+                        .canvas-header {
+                            text-align: center;
+                            padding: 20px;
+                            background: #006dcc;
+                            color: #fff;
+                            border-radius: 10px;
+                        }
+                        .canvas-content {
+                            background: #ffffff;
+                            padding: 30px;
+                            border-radius: 10px;
+                            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+                        }
+                    </style>
                 </head>
                 <body class="slds-scope">
-                    <div class="slds-grid slds-gutters">
+                    <div class="slds-grid slds-gutters slds-align_absolute-center">
                         <div class="slds-col slds-size_1-of-1">
-                            <div class="slds-box slds-theme_default slds-p-around_large">
-                                <h1 class="slds-text-heading_large">You are in a Heroku Canvas App  in GET call</h1>
+                            <div class="canvas-header">
+                                <h1 class="slds-text-heading_large">You are in a Heroku Canvas App (GET call)</h1>
+                            </div>
+                            <div class="slds-box canvas-content slds-p-around_large">
                                 <h2 class="slds-text-heading_medium">Welcome, Swapnil Borkar!</h2>
                                 <p class="slds-text-body_regular">Email: swapnil.brokar@salesforce.com</p>
                                 <p class="slds-text-body_regular">Organization ID: 00DDm000000HJmqMAG</p>
@@ -48,7 +70,6 @@ app.get("/", (req, res) => {
 });
 
 // Handle POST requests to the root URL `/`
-
 app.post("/", (req, res) => {
   const signedRequest = req.body.signed_request;
 
@@ -86,12 +107,34 @@ app.post("/", (req, res) => {
                 <head>
                     <title>Canvas App</title>
                     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/salesforce-lightning-design-system/2.14.3/styles/salesforce-lightning-design-system.min.css" />
+                    <style>
+                        body {
+                            background: linear-gradient(135deg, #f5f7fa, #ffddc1);
+                            color: #333;
+                            font-family: Arial, sans-serif;
+                        }
+                        .canvas-header {
+                            text-align: center;
+                            padding: 20px;
+                            background: #ff6f61;
+                            color: #fff;
+                            border-radius: 10px;
+                        }
+                        .canvas-content {
+                            background: #ffffff;
+                            padding: 30px;
+                            border-radius: 10px;
+                            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+                        }
+                    </style>
                 </head>
                 <body class="slds-scope">
-                    <div class="slds-grid slds-gutters">
+                    <div class="slds-grid slds-gutters slds-align_absolute-center">
                         <div class="slds-col slds-size_1-of-1">
-                            <div class="slds-box slds-theme_default slds-p-around_large">
+                            <div class="canvas-header">
                                 <h1 class="slds-text-heading_large">You are in a Heroku Canvas App</h1>
+                            </div>
+                            <div class="slds-box canvas-content slds-p-around_large">
                                 <h2 class="slds-text-heading_medium">Welcome, ${userContext.fullName}!</h2>
                                 <p class="slds-text-body_regular">User ID: ${userContext.userId}</p>
                                 <p class="slds-text-body_regular">Username: ${userContext.userName}</p>
