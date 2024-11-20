@@ -14,18 +14,14 @@ const CONSUMER_SECRET =
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-// Add a POST handler for the root URL `/`
-app.post("/", (req, res) => {
-  res.status(200).send("Root URL - This is a default response for POST /");
-});
-
 // Add a GET handler for the root URL `/` to check app status
 app.get("/", (req, res) => {
   res.send("The app is running! Use the /canvas route for Salesforce Canvas.");
 });
 
-// Handle POST requests to the Canvas App URL `/canvas`
-app.post("/canvas", (req, res) => {
+// Handle POST requests to the root URL `/`
+
+app.post("/", (req, res) => {
   const signedRequest = req.body.signed_request;
 
   if (!signedRequest) {
