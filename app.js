@@ -28,7 +28,7 @@ app.use((req, res, next) => {
   console.log(`Incoming request: ${req.method} ${req.url}`);
   next();
 });
-
+/*
 // Add a GET handler for the root URL `/` to check app status
 app.get("/", (req, res) => {
   res.send(`
@@ -74,9 +74,9 @@ app.get("/", (req, res) => {
             </html>
         `);
 });
-
+*/
 // Handle POST requests to the root URL `/`
-app.post("/", async (req, res) => {
+app.get("/", async (req, res) => {
   const signedRequest = req.body.signed_request;
 
   if (!signedRequest) {
