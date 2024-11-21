@@ -2,8 +2,6 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const crypto = require("crypto");
-const axios = require("axios");
-const querystring = require("querystring");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -11,12 +9,8 @@ const PORT = process.env.PORT || 3000;
 const cors = require("cors");
 app.use(cors());
 
-// Replace with your Salesforce Connected App's Consumer Secret, Client ID, and Client Secret
+// Replace with your Salesforce Connected App's Consumer Secret
 const CONSUMER_SECRET =
-  "53AEF0D60E313D1351076A0DC074619084D9D671E2F139F1E9B37EF4EB2A6C66";
-const CLIENT_ID =
-  "3MVG9X12xD2kqQmZIJflaXSMc74GMYs5QPy.87_QX7RgK2gWgbgzOwW6ZJ.ALe0IoJQX_wSessdU.cUOYfYs.";
-const CLIENT_SECRET =
   "53AEF0D60E313D1351076A0DC074619084D9D671E2F139F1E9B37EF4EB2A6C66";
 
 // Middleware
@@ -28,7 +22,7 @@ app.use((req, res, next) => {
   console.log(`Incoming request: ${req.method} ${req.url}`);
   next();
 });
-/*
+
 // Add a GET handler for the root URL `/` to check app status
 app.get("/", (req, res) => {
   res.send(`
@@ -74,40 +68,40 @@ app.get("/", (req, res) => {
             </html>
         `);
 });
-*/
+
 // Handle POST requests to the root URL `/`
-app.get("/", async (req, res) => {
+app.post("/", (req, res) => {
   const signedRequest = req.body.signed_request;
 
+  if (!signedRequest) {
+    return res.status(400).send("Signed request not found.");
+  }
+
   try {
-    // Perform OAuth flow to get access token
-    const tokenResponse = await axios.post(
-      "https://login.salesforce.com/services/oauth2/token",
-      querystring.stringify({
-        grant_type: "client_credentials",
-        client_id: CLIENT_ID,
-        client_secret: CLIENT_SECRET,
-      }),
-      {
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
-        },
-      }
-    );
+    // Split signed request into signature and payload
+    const [encodedSignature, encodedPayload] = signedRequest.split(".");
 
-    const accessToken = tokenResponse.data.access_token;
+    // Decode payload
+    const payload = Buffer.from(encodedPayload, "base64").toString("utf8");
 
-    // Make a request to Salesforce using the access token
-    const salesforceResponse = await axios.get(
-      `https://swapnilbor-230220-26-demo.lightning.force.com/services/data/v54.0/sobjects/Account`,
-      {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      }
-    );
+    // Verify the signature
+    const expectedSignature = crypto
+      .createHmac("sha256", CONSUMER_SECRET)
+      .update(encodedPayload)
+      .digest("base64");
 
-    // Respond with an HTML page styled with SLDS, including Salesforce data
+    if (expectedSignature !== encodedSignature) {
+      throw new Error("Invalid signature.");
+    }
+
+    // Parse the payload
+    const parsedPayload = JSON.parse(payload);
+
+    // Extract user and org context
+    const userContext = parsedPayload.context.user;
+    const orgContext = parsedPayload.context.organization;
+
+    // Respond with an HTML page styled with SLDS
     res.send(`
             <html>
                 <head>
@@ -141,10 +135,16 @@ app.get("/", async (req, res) => {
                                 <h1 class="slds-text-heading_large">You are in a Heroku Canvas App</h1>
                             </div>
                             <div class="slds-box canvas-content slds-p-around_large">
-                  
-                                <p class="slds-text-body_regular">Salesforce Data: ${JSON.stringify(
-                                  salesforceResponse.data
-                                )}</p>
+                                <h2 class="slds-text-heading_medium">Welcome, ${userContext.fullName}!</h2>
+                                <p class="slds-text-body_regular">User ID: ${userContext.userId}</p>
+                                <p class="slds-text-body_regular">Username: ${userContext.userName}</p>
+                                <p class="slds-text-body_regular">Email: ${userContext.email}</p>
+                                <p class="slds-text-body_regular">Role: ${userContext.role}</p>
+                                <p class="slds-text-body_regular">Profile ID: ${userContext.profileId}</p>
+                                <p class="slds-text-body_regular">Organization ID: ${orgContext.organizationId}</p>
+                                <p class="slds-text-body_regular">Organization Name: ${orgContext.name}</p>
+                                <p class="slds-text-body_regular">Currency ISO Code: ${orgContext.currencyIsoCode}</p>
+                                <p class="slds-text-body_regular">Instance URL: ${orgContext.instanceUrl}</p>
                             </div>
                         </div>
                     </div>
@@ -152,11 +152,8 @@ app.get("/", async (req, res) => {
             </html>
         `);
   } catch (error) {
-    console.error(
-      "Error validating signed request or OAuth flow:",
-      error.message
-    );
-    res.status(400).send("Invalid signed request or OAuth error.");
+    console.error("Error validating signed request:", error.message);
+    res.status(400).send("Invalid signed request.");
   }
 });
 
