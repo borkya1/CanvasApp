@@ -79,34 +79,7 @@ app.get("/", (req, res) => {
 app.get("/", async (req, res) => {
   const signedRequest = req.body.signed_request;
 
-  if (!signedRequest) {
-    return res.status(400).send("Signed request not found.");
-  }
-
   try {
-    // Split signed request into signature and payload
-    const [encodedSignature, encodedPayload] = signedRequest.split(".");
-
-    // Decode payload
-    const payload = Buffer.from(encodedPayload, "base64").toString("utf8");
-
-    // Verify the signature
-    const expectedSignature = crypto
-      .createHmac("sha256", CONSUMER_SECRET)
-      .update(encodedPayload)
-      .digest("base64");
-
-    if (expectedSignature !== encodedSignature) {
-      throw new Error("Invalid signature.");
-    }
-
-    // Parse the payload
-    const parsedPayload = JSON.parse(payload);
-
-    // Extract user and org context
-    const userContext = parsedPayload.context.user;
-    const orgContext = parsedPayload.context.organization;
-
     // Perform OAuth flow to get access token
     const tokenResponse = await axios.post(
       "https://login.salesforce.com/services/oauth2/token",
@@ -168,36 +141,7 @@ app.get("/", async (req, res) => {
                                 <h1 class="slds-text-heading_large">You are in a Heroku Canvas App</h1>
                             </div>
                             <div class="slds-box canvas-content slds-p-around_large">
-                                <h2 class="slds-text-heading_medium">Welcome, ${
-                                  userContext.fullName
-                                }!</h2>
-                                <p class="slds-text-body_regular">User ID: ${
-                                  userContext.userId
-                                }</p>
-                                <p class="slds-text-body_regular">Username: ${
-                                  userContext.userName
-                                }</p>
-                                <p class="slds-text-body_regular">Email: ${
-                                  userContext.email
-                                }</p>
-                                <p class="slds-text-body_regular">Role: ${
-                                  userContext.role
-                                }</p>
-                                <p class="slds-text-body_regular">Profile ID: ${
-                                  userContext.profileId
-                                }</p>
-                                <p class="slds-text-body_regular">Organization ID: ${
-                                  orgContext.organizationId
-                                }</p>
-                                <p class="slds-text-body_regular">Organization Name: ${
-                                  orgContext.name
-                                }</p>
-                                <p class="slds-text-body_regular">Currency ISO Code: ${
-                                  orgContext.currencyIsoCode
-                                }</p>
-                                <p class="slds-text-body_regular">Instance URL: ${
-                                  orgContext.instanceUrl
-                                }</p>
+                  
                                 <p class="slds-text-body_regular">Salesforce Data: ${JSON.stringify(
                                   salesforceResponse.data
                                 )}</p>
