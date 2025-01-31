@@ -13,9 +13,9 @@ app.use(cors());
 
 // Replace with your Salesforce Connected App's Consumer Secret, Client ID, and Client Secret
 const CONSUMER_SECRET =
-  "53AEF0D60E313D1351076A0DC074619084D9D671E2F139F1E9B37EF4EB2A6C66";
+  "<update>";
 const CLIENT_ID =
-  "3MVG9X12xD2kqQmZIJflaXSMc74GMYs5QPy.87_QX7RgK2gWgbgzOwW6ZJ.ALe0IoJQX_wSessdU.cUOYfYs.";
+  "<update>";
 const CLIENT_SECRET = "YOUR_CLIENT_SECRET";
 
 // Middleware
@@ -197,8 +197,8 @@ app.get("/", (req, res) => {
                             </div>
                             <div class="slds-box canvas-content slds-p-around_large">
                                 <h2 class="slds-text-heading_medium">Welcome, Swapnil Borkar!</h2>
-                                <p class="slds-text-body_regular">Email: swapnil.brokar@salesforce.com</p>
-                                <p class="slds-text-body_regular">Organization ID: 00DDm000000HJmqMAG</p>
+                                <p class="slds-text-body_regular">Email: swapnil.brokar@test.com</p>
+                                <p class="slds-text-body_regular">Organization ID: Test</p>
                                 <div class="oauth-button">
                                     <button onclick="launchOAuthFlow()" class="slds-button slds-button_brand">Launch OAuth Flow</button>
                                 </div>
@@ -213,7 +213,7 @@ app.get("/", (req, res) => {
                                     headers: {
                                         'Content-Type': 'application/json'
                                     },
-                                    body: JSON.stringify({ userId: '00DDm000000HJmqMAG' })
+                                    body: JSON.stringify({ userId: 'test' })
                                 });
                                 const data = await response.json();
                                 alert('Federation Identifier: ' + data.federationIdentifier);
