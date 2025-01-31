@@ -11,7 +11,7 @@ app.use(cors());
 
 // Replace with your Salesforce Connected App's Consumer Secret
 const CONSUMER_SECRET =
-  "53AEF0D60E313D1351076A0DC074619084D9D671E2F139F1E9B37EF4EB2A6C66";
+  "<update>";
 
 // Middleware
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -59,8 +59,8 @@ app.get("/", (req, res) => {
                             </div>
                             <div class="slds-box canvas-content slds-p-around_large">
                                 <h2 class="slds-text-heading_medium">Welcome, Swapnil Borkar!</h2>
-                                <p class="slds-text-body_regular">Email: swapnil.brokar@salesforce.com</p>
-                                <p class="slds-text-body_regular">Organization ID: 00DDm000000HJmqMAG</p>
+                                <p class="slds-text-body_regular">Email: swapnil.brokar@test.com</p>
+                                <p class="slds-text-body_regular">Organization ID: test</p>
                             </div>
                         </div>
                     </div>
